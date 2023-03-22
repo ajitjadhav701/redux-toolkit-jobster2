@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from "react";
 import { FormRow, Logo } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 import { toast } from "react-toastify";
-
+import { useSelector, useDispatch } from 'react-redux';
+import { loginUser, registerUser } from '../features/user/userSlice';
+import { useNavigate } from 'react-router-dom';
 const initialState = {
     name: "",
     email: "",
@@ -13,11 +15,22 @@ const initialState = {
 
 const Register = () => {
     const [values, setValues] = useState(initialState);
+    const { user, isLoading } = useSelector(store => store.user);
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
+
+    useEffect(() => {
+        if (user) {
+            setTimeout(() => {
+                navigate('/');
+            }, 3000);
+        }
+    }, [user]);
     const handleChange = (e) => {
         const name = e.target.name;
         const value = e.target.value;
-        console.log(`${name}:${value}`);
+        // console.log(`${name}:${value}`);
         setValues({ ...values, [name]: value });
     };
 
@@ -28,6 +41,11 @@ const Register = () => {
             toast.error("Please Fill Out All Fields");
             return;
         }
+        if (isMember) {
+            dispatch(loginUser({ email: email, password: password }));
+            return;
+        }
+        dispatch(registerUser({ name, email, password }))
     };
     const toggleMember = () => {
         setValues({ ...values, isMember: !values.isMember })
@@ -60,8 +78,8 @@ const Register = () => {
                     handleChange={handleChange}
                 />
 
-                <button type="submit" className="btn btn-block">
-                    submit
+                <button type="submit" disabled={isLoading} className="btn btn-block">
+                    {isLoading ? 'Loading..!' : "submit"}
                 </button>
                 <p>{values.isMember ? 'Not a member yet ?' : 'Already a member'}
                     <button type='button' className='member-btn' onClick={toggleMember}>
