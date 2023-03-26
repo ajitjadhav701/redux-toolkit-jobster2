@@ -1,8 +1,8 @@
 import React from 'react'
-
+import { AllJobs } from './index'
 const Stats = () => {
     return (
-        <div>Stats</div>
+        <div><AllJobs /></div>
     )
 }
 

@@ -1,8 +1,11 @@
 import React from 'react'
-
+import Wrapper from '../assets/wrappers/BigSidebar'
 const BigSidebar = () => {
     return (
-        <div>BigSidebar</div>
+        <Wrapper>
+            <h2>big sidebar</h2>
+
+        </Wrapper>
     )
 }
 
